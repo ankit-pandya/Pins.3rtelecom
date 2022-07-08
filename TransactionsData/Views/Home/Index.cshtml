@@ -1,0 +1,182 @@
+﻿@model TransactionsData.Models.MerchantModel
+@{    
+    
+        ViewData["Title"] = "Home Page";
+}
+<div class="row ">
+    <div class="container jumbotron col-md-12">
+        @using (Html.BeginForm(new { @class = "form-horizontal", role = "form", @id = "frmData" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="col">
+                <div class="form-group row control-label">
+                    <div class="col-md-4">
+                        Merchant Id:
+                        @Html.EditorFor(model => model.MerchantID, new { htmlAttributes = new { @class = "form-control", name = "mid", @id = "MerchantID" } })
+                    </div>
+                    <div class="col-md-4">
+                        3R Merchant Id:
+                        @Html.EditorFor(model => model.OldMID, new { htmlAttributes = new { @class = "form-control", @id = "OldMID" } })
+                    </div>
+                    <div class="col-md-4">
+                        Merchant Name:
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @id = "Name" } })
+                    </div>
+                </div>
+
+                <div class="form-group row control-label">
+                    <div class="col-md-4">
+                        Contact Name:
+                        @Html.EditorFor(model => model.ContactName, new { htmlAttributes = new { @class = "form-control", @id = "ContactName" } })
+                    </div>
+                    <div class="col-md-4">
+                        Address:
+                        @Html.EditorFor(model => model.Address1, new { htmlAttributes = new { @class = "form-control", @id = "Address1" } })
+                    </div>
+                    <div class="col-md-4 ">
+                        Terminal Id:
+                        @Html.EditorFor(model => model.TerminalId, new { htmlAttributes = new { @class = "form-control", @id = "TerminalId" } })
+                    </div>
+                </div>
+
+                <div class="form-group row control-label">
+                    <div class="col float-left col-md-8 col-sm-8">
+                        @*<input type="submit" value="     Search     " class="btn btn-primary" id="btnSearch" />*@
+                        <input id="btnSearch" class="btn btn-primary" type="button" value="Search" />
+                    </div>
+                    <div class="col float-right col-md-4 col-sm-4">
+                        <input class="btn btn-primary" type="button" value="Create New Merchant" onclick="location.href='@Url.Action("CreateMerchant", "Merchant")'" />
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+<div id="tableshow" class="container" hidden>
+    <table id="tbl" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Ref ID</th>
+                <th>Merchant ID</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Postcode</th>
+                @*<th>Credit Limit</th>
+                <th>Balance</th>*@
+            </tr>
+        </thead>
+    </table>
+</div>
+<link href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        var input = document.getElementById("MerchantID");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("btnSearch").click();
+            }
+        });
+        var input = document.getElementById("OldMID");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("btnSearch").click();
+            }
+        });
+        var input = document.getElementById("Name");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("btnSearch").click();
+            }
+        });
+        var input = document.getElementById("ContactName");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("btnSearch").click();
+            }
+        });
+        var input = document.getElementById("Address1");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("btnSearch").click();
+            }
+        });
+        var input = document.getElementById("TerminalId");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("btnSearch").click();
+            }
+        });
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            $("#btnSearch").click(function () {
+                document.getElementById("tableshow").removeAttribute("hidden");
+
+                var FormData = {
+                    "MerchantID": $("#MerchantID").val(),
+                    "OldMID": $("#OldMID").val(),
+                    "Name": $("#Name").val(),
+                    "ContactName": $("#ContactName").val(),
+                    "Address1": $("#Address1").val(),
+                    "TerminalId": $("#TerminalId").val()
+                };
+
+                if ($.fn.dataTable.isDataTable('#tbl')) {
+                    table = $('#tbl').DataTable();
+                    table.destroy();
+                }
+
+                $("#tbl").DataTable({
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                    "ajax": {
+                        "url": '@Url.Action("Search", "Home")',
+                        "type": "Post",
+                        "data": FormData,
+                        "datatype": "json"
+                    },
+                    "columns": [
+                        {
+                            "data": "merchantID", render: function (data) {
+                                var url = '@Url.Action("ShowMerchant", "Merchant")';
+                                data = "<a href= " + url +  "?mid=" + data + ">" + data + '</a>';
+                                //data = '<a href="' + BaseURL + '/Merchant/ShowMerchant?mid=' + data + '">' + data + '</a>';
+                                return data;
+                            }
+                        },
+                        { "data": "oldMID" },
+                        { "data": "name" },
+                        { "data": "address1" },
+                        { "data": "postcode" },
+                        //{
+                        //    "data": "creditLimit" , render: function (data) {
+                        //        var d = "£" + (Number(data)).toFixed(2);
+                        //        return d
+                        //    }
+                        //},
+                        //{
+                        //    "data": "balance", render: function (data) {
+                        //        var d = "£" + (Number(data)).toFixed(2);
+                        //        return d
+                        //    }
+                        //},
+                    ]
+                });
+            });
+        });
+    </script>
+
+}

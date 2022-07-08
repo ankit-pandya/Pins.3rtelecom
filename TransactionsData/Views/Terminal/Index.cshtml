@@ -1,0 +1,65 @@
+﻿@model TransactionsData.Models.MerchantTerminals
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<h4>MerchantTerminals</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="id" class="control-label"></label>
+                <input asp-for="id" class="form-control" />
+                <span asp-validation-for="id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MerchantID" class="control-label"></label>
+                <input asp-for="MerchantID" class="form-control" />
+                <span asp-validation-for="MerchantID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TerminalId" class="control-label"></label>
+                <input asp-for="TerminalId" class="form-control" />
+                <span asp-validation-for="TerminalId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MacId" class="control-label"></label>
+                <input asp-for="MacId" class="form-control" />
+                <span asp-validation-for="MacId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IpAddress" class="control-label"></label>
+                <input asp-for="IpAddress" class="form-control" />
+                <span asp-validation-for="IpAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DiD" class="control-label"></label>
+                <input asp-for="DiD" class="form-control" />
+                <span asp-validation-for="DiD" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Origin" class="control-label"></label>
+                <input asp-for="Origin" class="form-control" />
+                <span asp-validation-for="Origin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TerminalRef" class="control-label"></label>
+                <input asp-for="TerminalRef" class="form-control" />
+                <span asp-validation-for="TerminalRef" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

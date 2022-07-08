@@ -1,0 +1,37 @@
+﻿
+<table id="tblTerms" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Terminal ID</th>
+            <th>IP Address</th>            
+        </tr>
+    </thead>
+</table>
+<link href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        if ($.fn.dataTable.isDataTable('#tblTerms')) {
+            table = $('#tblTerms').DataTable();
+                table.destroy();
+            }
+        $("#tblTerms").DataTable({
+                "ajax": {
+                    "url": '@Url.Action("getListofTerminals", "Merchant")' + "?mid=" + "@ViewData["MerchantID"]",
+                    "type": "Get",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        "data": "terminalId", render: function (data) {
+                            data = "<a href=" + '@Url.Action("ShowTerminal", "Merchant")' + "?tid=" + data + "&mid=" + "@ViewData["MerchantID"]" + ">" + data + '</a>';
+                            return data;
+                        }
+                    },
+                    { "data": "ipAddress" },
+                ]
+            });
+
+    });
+</script>

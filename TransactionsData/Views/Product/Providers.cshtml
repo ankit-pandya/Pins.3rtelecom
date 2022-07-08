@@ -1,0 +1,114 @@
+﻿@model TransactionsData.Models.ProviderModel
+@{
+    ViewData["Title"] = "Providers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Provider Details</h1>
+
+<div class="row">
+    <div class="container jumbotron col-md-12">
+        @using (Html.BeginForm(new { @class = "form-horizontal", role = "form", @id = "frmData" }))
+        @*@using (Html.BeginForm("Search", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))*@
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group row control-label">
+                <div class="col">
+                    Provider Name:
+                    @Html.EditorFor(model => model.providerName, new { htmlAttributes = new { @class = "form-control", name = "mid", @id = "ProviderName" } })
+                </div>
+                <div class="col">
+                    Provider Code:
+                    @Html.EditorFor(model => model.providerCode, new { htmlAttributes = new { @class = "form-control", @id = "ProviderCode" } })
+                </div>
+            </div>
+            <div class="form-group row control-label">
+                <div class="col float-left ">
+                    @*<input type="submit" value="     Search     " class="btn btn-primary" id="btnSearch" />*@
+                    <input id="btnSearch" class="btn btn-primary" type="button" value="Search" />
+                </div>
+                <div class="col float-right">
+                    <input class="btn btn-primary" type="button" value="Create New Provider" onclick="location.href='@Url.Action("NewProvider", "Product")'" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<div id="tableshow" hidden>
+    <table id="tbl" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Provider Name</th>
+                <th>Provider Code</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<link href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        var input = document.getElementById("ProviderName");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("btnSearch").click();
+            }
+        });
+        var input = document.getElementById("ProviderCode");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("btnSearch").click();
+            }
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#btnSearch").click(function () {
+                document.getElementById("tableshow").removeAttribute("hidden");
+
+                var FormData = {
+                    "SupplierID": $("#ProviderCode").val(),
+                    "SupplierName": $("#ProviderName").val()
+                };
+
+                if ($.fn.dataTable.isDataTable('#tbl')) {
+                    table = $('#tbl').DataTable();
+                    table.destroy();
+                }
+
+                $("#tbl").DataTable({
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                    "ajax": {
+                        "url": "@Url.Action("Searchprovider", "Product")",
+                        "type": "Post",
+                        "data": FormData,
+                        "datatype": "json"
+                    },
+                    "columns": [
+                        {
+                            "data": "providerCode", render: function (data) {
+                                var url = '@Url.Action("ShowProvider", "Product")';
+                                data = "<a href=" + url + "?providerid=" + data + ">" + data + '</a>';
+                                return data;
+                            }
+                        },
+                        { "data": "providerName" },
+                        { "data": "status" },
+                    ]
+                });
+            });
+        });
+    </script>
+
+}
+

@@ -1,0 +1,149 @@
+﻿@model TransactionsData.Models.MerchantModel
+@{
+    ViewData["Title"] = "ShowMerchant";
+}
+
+<h1>ShowMerchant</h1>
+
+<div class="container jumbotron">
+    @using (Html.BeginForm("CreateMerchant", "Merchant", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-md-12">
+            <div class="form-group row control-label">
+                <div class="col">
+                    Merchant Id:
+                    @Html.EditorFor(model => model.MerchantID, new { htmlAttributes = new { @class = "form-control", @id = "merchantID" } })
+                </div>
+                <div class="col">
+                    3R Merchant Id:
+                    @Html.EditorFor(model => model.OldMID, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col">
+                    Merchant Name:
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col">
+                    Contact Name:
+                    @Html.EditorFor(model => model.ContactName, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+
+            <div class="form-group row control-label">
+                <div class="col">
+                    Address:
+                    @Html.EditorFor(model => model.Address1, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col">
+                    Town:
+                    @Html.EditorFor(model => model.Address3, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col">
+                    County:
+                    @Html.EditorFor(model => model.Address4, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col">
+                    Postcode:
+                    @Html.EditorFor(model => model.Postcode, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+
+            <div class="form-group row control-label">
+                <div class="col">
+                    Status:
+                    @{
+                        var statues = new List<SelectListItem>()
+                                                                                                            {
+                            new SelectListItem() { Text = "Enabled", Value = "#Enabled" },
+                            new SelectListItem() { Text = "Disabled", Value = "#Disabled" },
+                        };
+                    }
+
+                    @Html.DropDownListFor(model => model.Status, statues, new { @class = "form-control" })
+                </div>
+                <div class="col">
+                    Type:
+                    @{
+                        var types = new List<SelectListItem>()
+                                                                                                                {
+                            new SelectListItem() { Text = "Credit", Value = "Credit" },
+                            new SelectListItem() { Text = "Prepay", Value = "Prepay" },
+                        };
+                    }
+
+                    @Html.DropDownListFor(model => model.Type, types, new { @class = "form-control" })
+                </div>
+                <div class="col">
+                    Balance:
+                    @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col">
+                    Balance Warning:
+                    @Html.EditorFor(model => model.BalWarning, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+
+            <div class="form-group row control-label">
+                <div class="col">
+                    Credit Limit:
+                    @Html.EditorFor(model => model.CreditLimit, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col">
+                    Pin mode:
+                    @Html.EditorFor(model => model.PinMode, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col ">
+                    Terminal Id:
+                    @Html.EditorFor(model => model.TerminalId, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col ">
+                    Telephone:
+                    @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+
+            <div class="form-group row control-label">
+                <div class="col float-left">
+                    <input type="submit" value="Save" class="btn btn btn-success btn-block" />
+                </div>
+            </div>
+
+        </div>
+    }
+
+    <div class="form-group row control-label">
+        <div class="col-lg-3">
+            <button id="btnICC" class="btn btn-primary btn-block btn-secondary">Transactions</button>
+        </div>
+        <div class="col-lg-3">
+            <button id="btnICC" class="btn btn-primary btn-block btn-secondary" hidden>MTU Transactions</button>
+        </div>
+        <div class="col-lg-3">
+            <button class="btn btn-primary btn-block btn-secondary">Payments</button>
+        </div>
+        <div class="col-lg-3">
+            <button class="btn btn-primary btn-block btn-secondary">Terminals</button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 showdata" id="AREA_PARTIAL_VIEW">
+
+    </div>
+</div>
+
+<link href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#btnICC").click(function () {
+                $("#AREA_PARTIAL_VIEW").load(@Url.Action("getICCTransactions", "Merchant");
+            });
+        });
+    </script>
+
+}

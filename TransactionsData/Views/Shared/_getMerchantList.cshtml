@@ -1,0 +1,54 @@
+﻿
+<link href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+<table id="tbl" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Merchant ID</th>
+            <th>Old Merchant ID</th>
+            <th>Name</th>
+            <th>Address1</th>
+            <th>Postcode</th>
+            <th>TerminalID</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+</table>
+<link href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@section scripts{
+<script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+            if ($.fn.dataTable.isDataTable('#tbl')) {
+                table = $('#tbl').DataTable();
+                table.destroy();
+        }
+
+            $("#tbl").DataTable({
+                "ajax": {
+                    "url": @Url.Action("Searched", "Home"),
+                    "type": "Get",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        "data": "merchantID", render: function (data) {
+                            data = "<a href=" + @Url.Action("index", "Merchant") + "?mid=" + data + ">" + data + '</a>';
+                            return data;
+                        }
+                    },
+                    { "data": "oldMID" },
+                    { "data": "name" },
+                    { "data": "address1" },
+                    { "data": "postcode" },
+                    { "data": "terminalId" },
+                    { "data": "status" },
+                ]
+            });
+    });
+</script>
+
+}

@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewData["Title"] = "Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Reports</h1>
+<br />
+<br />
+<div class="container">
+    <div class="form-group row control-label">
+        <div class="col">
+            From Date:
+            <input type="date" id="fromdate">
+        </div>
+        <div class="col">
+            To Date:
+            <input type="date" id="todate">
+        </div>
+
+        <div class="col  float-left">
+            <input type="button" id="btnSearchTrans" value="Search" class="btn btn-primary btn-block btn-secondary" />
+        </div>
+    </div>
+    <div class="form-group row control-label">
+        <div class="col  float-left">
+            <input type="button" id="btnexportinvoices" value="Export for Invoices" class="btn btn-secondary btn-block btn-secondary" />
+        </div>
+        <div class="col  float-left">
+            <input type="button" id="btnexportICCinvoices" value="Export for ICC Invoices" class="btn btn-secondary btn-block btn-secondary" />
+        </div>
+
+    </div>
+</div>
+
+<div class="container   mb-2 bg-light text-dark">
+    <table id="tblTranstotal" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Total Transactions</th>
+                <td id="tt"></td>
+                <th>Total Successful Transactions</th>
+                <td id="tst"></td>
+                <th>Total Failed Transactions</th>
+                <td id="tft"></td>
+                <th>Total Value</th>
+                <td id="tv"></td>
+            </tr>
+        </thead>
+    </table>
+
+    <table id="tblTrans" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Trans ID</th>
+                <th>Date Time</th>
+                <th>Merchant Id</th>
+                <th>Terminal Id</th>
+                <th>Product Name</th>
+                <th>Value</th>
+                <th>Txn Number</th>
+                <th>Response Code</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+    </table>
+
+    <link href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+</div>
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var date = new Date();
+
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+
+            if (month < 10) month = "0" + month;
+            if (day < 10) day = "0" + day;
+
+            document.getElementById("fromdate").value = year + "-" + month + "-" + day;
+            document.getElementById("todate").value = year + "-" + month + "-" + day;
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#btnSearchTrans").click(function () {
+
+                if ($.fn.dataTable.isDataTable('#tblTrans')) {
+                    table = $('#tblTrans').DataTable();
+                    table.destroy();
+                }
+
+                $.ajax({
+                    url: '@Url.Action("getTransactions", "Report")' + "?from=" + document.getElementById("fromdate").value + "&to=" + document.getElementById("todate").value,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (dataresp) {
+                        $("#tblTrans").DataTable({
+                            "lengthMenu": [[1000, 5000, -1], [1000, 5000, "All"]],
+                            "data": dataresp.data,
+                            "columns": [
+                                { "data": "transactionID" },
+                                {
+                                    "data": "dateandTime", render: function (data) {
+                                        var d = new Date(data);
+                                        return d.toLocaleString()
+                                    }
+                                },
+                                { "data": "merchantID" },
+                                { "data": "terminalId" },
+                                { "data": "productName" },
+                                {
+                                    "data": "value", render: function (data) {
+                                        var d = "£" + (Number(data) / 100).toFixed(2);
+                                        return d
+                                    }
+                                },
+                                { "data": "txnNumber" },
+                                { "data": "responseCode" },
+                                { "data": "status" },
+                            ],
+                            order: [[1, 'desc']],
+                        });
+                        document.getElementById("tt").innerHTML = dataresp.tt;
+                        document.getElementById("tst").innerHTML = dataresp.tst;
+                        document.getElementById("tv").innerHTML = dataresp.tv;
+                        document.getElementById("tft").innerHTML = dataresp.tt - dataresp.tst;
+                    },
+                    error: function () {
+                        alert('Error occured');
+                    }
+                });
+
+            }); // serach button click event
+            $("#btnexportinvoices").click(function () {
+                location.href = "@Url.Action("exportinvoices", "Report")" + "?from=" + document.getElementById("fromdate").value + "&to=" + document.getElementById("todate").value + "&type=MTU";
+            });
+            $("#btnexportICCinvoices").click(function () {
+                location.href = "@Url.Action("exportinvoices", "Report")" + "?from=" + document.getElementById("fromdate").value + "&to=" + document.getElementById("todate").value + "&type=ICC";
+            });
+        });
+    </script>
+
+}

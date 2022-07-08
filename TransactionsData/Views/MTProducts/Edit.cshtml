@@ -1,0 +1,73 @@
+﻿@model TransactionsData.Models.MTProductModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit Product</h1>
+
+<h4></h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="id" />
+            <div class="col-md-12">
+                <div class="form-group row control-label">
+                    <div class="col-md-4">
+                        <label asp-for="productCode3r" class="control-label"></label>
+                        <input asp-for="productCode3r" class="form-control" />
+                        <span asp-validation-for="productCode3r" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="productCode" class="control-label"></label>
+                        <input asp-for="productCode" class="form-control" />
+                        <span asp-validation-for="productCode" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <label asp-for="productName" class="control-label"></label>
+                        <input asp-for="productName" class="form-control" />
+                        <span asp-validation-for="productName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row control-label">
+                    <div class="col-md-4">
+                        <label asp-for="value" class="control-label"></label>
+                        <input asp-for="value" class="form-control" />
+                        <span asp-validation-for="value" class="text-danger"></span>                        
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="status" class="control-label"></label>
+                        <input asp-for="status" class="form-control" />
+                        <span asp-validation-for="status" class="text-danger"></span>
+                    </div>                    
+                </div>
+                <div class="form-group">
+                    <label asp-for="information" class="control-label"></label>
+                    <input asp-for="information" class="form-control" />
+                    <span asp-validation-for="information" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="provider3r" class="control-label"></label>
+                    <input asp-for="provider3r" class="form-control" />
+                    <span asp-validation-for="provider3r" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="product3r" class="control-label"></label>
+                    <input asp-for="product3r" class="form-control" />
+                    <span asp-validation-for="product3r" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

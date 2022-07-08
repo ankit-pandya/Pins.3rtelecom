@@ -1,0 +1,33 @@
+﻿<div class="container font-weight-bolder text-lg-center">
+    Transaction ID = @ViewData["TransactionID"]
+</div>
+<br />
+<div>Request:</div>
+<div class="container" style="background-color: azure" id="requestData"></div>
+<br />
+<div>Response:</div>
+<div class="container" style="background-color:azure" id="responseData"></div>
+<br />
+    <script>
+
+    $(document).ready(function () {
+            var dataarrived;
+
+       $.ajax({
+       url: '@Url.Action("getLogsData", "Merchant")' + "?tid=" + @ViewData["TransactionID"],
+       type: 'GET',
+       dataType: 'json',
+           success: function (dataresp) {
+               document.getElementById("requestData").innerHTML = dataresp.data.requestData;//JSON.stringify(dataresp.data.requestData, undefined, 2);
+               document.getElementById("responseData").innerHTML = dataresp.data.responseData;//JSON.stringify(dataresp.data.responseData, null, 2);
+           },
+       error: function () {
+        alert('Error occured');
+        }
+   });
+
+
+    });
+
+
+    </script>

@@ -1,0 +1,48 @@
+﻿@model TransactionsData.Models.ICCProductData
+@{
+    ViewData["Title"] = "ICC Pin";
+}
+<h1>ICC Product Pin</h1>
+<div class="container jumbotron">
+    @using (Html.BeginForm("CreatePin", "ICC", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+    <div class="col-md-12">
+        <div class="form-group row control-label">
+            <div class="col">
+                Provider Code:
+                @Html.EditorFor(model => model.ProviderCode, new { htmlAttributes = new { @class = "form-control", name = "mid", @id = "ProductName" } })
+            </div>
+            <div class="col">
+                Product Code:
+                @Html.EditorFor(model => model.ProductCode, new { htmlAttributes = new { @class = "form-control", @id = "ProductCode" } })
+            </div>
+            <div class="col">
+                Value:
+                @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control", @id = "ProductStatus" } })
+            </div>
+        </div>
+
+        @*<div class="form-group row control-label">
+            <div class="col">
+                Status:
+                @Html.EditorFor(model => model, new { htmlAttributes = new { @class = "form-control", name = "mid", @id = "status" } })
+            </div>
+            <div class="col">
+                Topup Level:
+                @Html.EditorFor(model => model.TopupLevel, new { htmlAttributes = new { @class = "form-control", @id = "topuplevel" } })
+            </div>
+            <div class="col">
+                Information:
+                @Html.EditorFor(model => model.Information, new { htmlAttributes = new { @class = "form-control", @id = "info" } })
+            </div>
+        </div>*@
+
+        <div class="form-group row control-label">
+            <div class="col float-left col-md-8">
+                <input type="submit" value="Create Product Pin" class="btn btn-primary" id="btnCreatePin" />
+            </div>
+        </div>
+    </div>
+    }
+</div>

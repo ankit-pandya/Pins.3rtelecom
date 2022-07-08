@@ -1,0 +1,107 @@
+﻿@model TransactionsData.Models.ProductModel
+@{
+    ViewData["Title"] = "Product";
+}
+<h1>Product Details</h1>
+<div class="row">
+    <div class="container jumbotron col-md-12">
+        @using (Html.BeginForm(new { @class = "form-horizontal", role = "form", @id = "frmData" }))    
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group row control-label">
+                <div class="col">
+                    Product Name:
+                    @Html.EditorFor(model => model.productName, new { htmlAttributes = new { @class = "form-control", name = "mid", @id = "ProductName" } })
+                </div>
+                <div class="col">
+                    Product Code:
+                    @Html.EditorFor(model => model.productCode, new { htmlAttributes = new { @class = "form-control", @id = "ProductCode" } })
+                </div>
+            </div>
+            <div class="form-group row control-label">
+                <div class="col float-left ">                    
+                    <input id="btnSearch" class="btn btn-primary" type="button" value="Search" />
+                </div>
+                <div class="col float-right">
+                    <input class="btn btn-primary" type="button" value="Create New Product" onclick="location.href='@Url.Action("NewProduct", "Product")'" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div id="tableshow"  hidden>
+    <table id="tbl" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Product Code</th>
+                <th>Product Name</th>                            
+                <th>Supplier Code</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<link href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        var input = document.getElementById("ProductName");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("btnSearch").click();
+            }
+        });
+        var input = document.getElementById("ProductCode");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("btnSearch").click();
+            }
+        });        
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#btnSearch").click(function () {
+                document.getElementById("tableshow").removeAttribute("hidden");
+
+                var FormData = {
+                    "ProductCode": $("#ProductCode").val(),
+                    "ProductName": $("#ProductName").val()
+                };
+
+                if ($.fn.dataTable.isDataTable('#tbl')) {
+                    table = $('#tbl').DataTable();
+                    table.destroy();
+                }
+
+                $("#tbl").DataTable({
+                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                    "ajax": {
+                        "url": "@Url.Action("Searchproduct", "Product")",
+                        "type": "Post",
+                        "data": FormData,
+                        "datatype": "json"
+                    },
+                    "columns": [
+                        {
+                            "data": "productCode", render: function (data) {
+                                var url = '@Url.Action("ShowProduct", "Product")';
+                                data = "<a href=" + url + "?productid=" + data + ">" + data + '</a>';
+                                return data;
+                            }
+                        },
+                        { "data": "productName" },
+                        { "data": "providerCode" },
+                    ]
+                });
+            });
+        });
+    </script>
+
+}
+

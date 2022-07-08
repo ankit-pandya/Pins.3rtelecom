@@ -1,0 +1,820 @@
+﻿@model TransactionsData.Models.MerchantModel
+@{
+    ViewData["Title"] = "Merchant Details";
+}
+
+<h1>Merchant Details</h1>
+
+<div class="container jumbotron col-md-12">
+
+    @using (Html.BeginForm("UpdateMerchant", "Merchant", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="row">
+            <div class="col-md-8">
+                @Html.AntiForgeryToken()
+                <div class="form-group row control-label">
+                    <div class="col-md-3">
+                        Merchant Id:
+                        @Html.EditorFor(model => model.MerchantID, new { htmlAttributes = new { @class = "form-control", @id = "merchantID" } })
+                        <div hidden>@Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @id = "mID" } })</div>
+                    </div>
+                    <div class="col-md-3">
+                        3R Merchant Id:
+                        @Html.EditorFor(model => model.OldMID, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    <div class="col-md-3">
+                        Merchant Name:
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    <div class="col-md-3">
+                        Contact Name:
+                        @Html.EditorFor(model => model.ContactName, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="form-group row control-label">
+                    <div class="col-md-3">
+                        Address:
+                        @Html.EditorFor(model => model.Address1, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    <div class="col-md-3">
+                        Town:
+                        @Html.EditorFor(model => model.Address3, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    <div class="col-md-3">
+                        County:
+                        @Html.EditorFor(model => model.Address4, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    <div class="col-md-3">
+                        Postcode:
+                        @Html.EditorFor(model => model.Postcode, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="form-group row control-label">
+                    <div class="col-md-3">
+                        Status:
+                        @{
+                            var statues = new List<SelectListItem>()
+                                                                                                                                                                                                                                                                                                                                                                {
+                            new SelectListItem() { Text = "Enabled", Value = "Enabled" },
+                            new SelectListItem() { Text = "Disabled", Value = "Disabled" },
+                        };
+                        }
+                        @Html.DropDownListFor(model => model.Status, statues, new { @class = "form-control", @id = "statustext" })
+                    </div>
+                    <div class="col-md-3">
+                        Type:
+                        @{
+                            var types = new List<SelectListItem>()
+                                                                                                                                                                                                                                                                                                                                                            {
+                            new SelectListItem() { Text = "Credit", Value = "Credit" },
+                            new SelectListItem() { Text = "Prepay", Value = "Prepay" },
+                        };
+                        }
+
+                        @Html.DropDownListFor(model => model.Type, types, new { @class = "form-control" })
+                    </div>
+                    <div class="col-md-3">
+                        Credit Limit:
+                        @Html.EditorFor(model => model.CreditLimit, new { htmlAttributes = new { @class = "form-control", @id = "1234" } })
+                    </div>
+                    <div class="col-md-3">
+                        Balance Warning:
+                        @Html.EditorFor(model => model.BalWarning, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="form-group row control-label">
+                    <div class="col-md-3">
+                        Balance:
+                        @*<input type="text" class="form-control" value="@ViewBag.MerchantBalance" disabled="disabled" id="balancetxt" onchange = "balanceUpdated()"/>*@
+                        @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { @class = "form-control", @id = "balancetxt"@*, @onchange = "balanceUpdated()"*@ } })
+                    </div>
+                    <div class="col-md-3">
+                        Pin mode:
+                        @{
+                            var typesofmode = new List<SelectListItem>()
+                                                                                                                                                                                                                                                                                                                                                                                            {
+                            new SelectListItem() { Text = "Online First", Value = "Online First" },
+                            new SelectListItem() { Text = "Stock First", Value = "Stock First" },
+                        };
+                        }
+                        @Html.DropDownListFor(model => model.PinMode, typesofmode, new { @class = "form-control", @id = "pinmode" })
+                    </div>
+                    @*<div class="col ">
+                            Terminal Id:
+                            @Html.EditorFor(model => model.TerminalId, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>*@
+                    <div class="col-md-3 ">
+                        Telephone:
+                        @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    <div class="col-md-3 ">
+                        Allow EE:
+                        @Html.CheckBoxFor(model => model.allowEE, new { htmlAttributes = new { @class = "btn-check" } })
+                        <br />
+                        Bulk Transaction Email:
+                        @Html.CheckBoxFor(model => model.emailbulk, new { htmlAttributes = new { @class = "btn-check" } })
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <label class="col-md-12 text-center"><strong>Opening Hours</strong></label>
+                </div>
+                <div class="row">
+                    <label class="col-3 col-sm-6 col-lg-2">Mon</label>
+                    <div class="col-9 col-sm-6 col-lg-10 text-start">
+                        @Html.DropDownListFor(M => M.MonOH, new List<SelectListItem>
+                            {
+                             new SelectListItem { Text = "00", Value = "00", Selected=true},
+                             new SelectListItem { Text = "01", Value = "01"},
+                             new SelectListItem { Text = "02", Value = "02"},
+                             new SelectListItem { Text = "03", Value = "03"},
+                             new SelectListItem { Text = "04", Value = "04"},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "06", Value = "06"},
+                             new SelectListItem { Text = "07", Value = "07"},
+                             new SelectListItem { Text = "08", Value = "08"},
+                             new SelectListItem { Text = "09", Value = "09"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "11", Value = "11"},
+                             new SelectListItem { Text = "12", Value = "12"},
+                             new SelectListItem { Text = "13", Value = "13"},
+                             new SelectListItem { Text = "14", Value = "14"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "16", Value = "16"},
+                             new SelectListItem { Text = "17", Value = "17"},
+                             new SelectListItem { Text = "18", Value = "18"},
+                             new SelectListItem { Text = "19", Value = "19"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "21", Value = "21"},
+                             new SelectListItem { Text = "22", Value = "22"},
+                             new SelectListItem { Text = "23", Value = "23"},
+                        }, "", "00")
+                        @Html.DropDownListFor(M => M.MonOM, new List<SelectListItem>
+                            { new SelectListItem { Text = "00", Value = "00", Selected=true},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "25", Value = "25"},
+                             new SelectListItem { Text = "30", Value = "30"},
+                             new SelectListItem { Text = "35", Value = "35"},
+                             new SelectListItem { Text = "40", Value = "40"},
+                             new SelectListItem { Text = "45", Value = "45"},
+                             new SelectListItem { Text = "50", Value = "50"},
+                             new SelectListItem { Text = "55", Value = "55"},
+                             new SelectListItem { Text = "59", Value = "59"},
+                        }, "", "00")
+                        -
+                        @Html.DropDownListFor(M => M.MonCH, new List<SelectListItem>
+                            { new SelectListItem { Text = "01", Value = "01"},
+                             new SelectListItem { Text = "02", Value = "02"},
+                             new SelectListItem { Text = "03", Value = "03"},
+                             new SelectListItem { Text = "04", Value = "04"},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "06", Value = "06"},
+                             new SelectListItem { Text = "07", Value = "07"},
+                             new SelectListItem { Text = "08", Value = "08"},
+                             new SelectListItem { Text = "09", Value = "09"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "11", Value = "11"},
+                             new SelectListItem { Text = "12", Value = "12"},
+                             new SelectListItem { Text = "13", Value = "13"},
+                             new SelectListItem { Text = "14", Value = "14"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "16", Value = "16"},
+                             new SelectListItem { Text = "17", Value = "17"},
+                             new SelectListItem { Text = "18", Value = "18"},
+                             new SelectListItem { Text = "19", Value = "19"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "21", Value = "21"},
+                             new SelectListItem { Text = "22", Value = "22"},
+                             new SelectListItem { Text = "23", Value = "23", Selected = true},
+                        }, "", "00")
+                        @Html.DropDownListFor(M => M.MonCM, new List<SelectListItem>
+                            { new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "25", Value = "25"},
+                             new SelectListItem { Text = "30", Value = "30"},
+                             new SelectListItem { Text = "35", Value = "35"},
+                             new SelectListItem { Text = "40", Value = "40"},
+                             new SelectListItem { Text = "45", Value = "45"},
+                             new SelectListItem { Text = "50", Value = "50"},
+                             new SelectListItem { Text = "55", Value = "55" },
+                             new SelectListItem { Text = "59", Value = "59", Selected = true},
+                        }, "", "00")
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-3 col-sm-6 col-lg-2">Tue</label>
+                    <div class="col-9 col-sm-6 col-lg-10 text-start">
+                        @Html.DropDownListFor(M => M.TueOH, new List<SelectListItem>
+                            { new SelectListItem { Text = "00", Value = "00", Selected = true},
+                             new SelectListItem { Text = "01", Value = "01"},
+                             new SelectListItem { Text = "02", Value = "02"},
+                             new SelectListItem { Text = "03", Value = "03"},
+                             new SelectListItem { Text = "04", Value = "04"},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "06", Value = "06"},
+                             new SelectListItem { Text = "07", Value = "07"},
+                             new SelectListItem { Text = "08", Value = "08"},
+                             new SelectListItem { Text = "09", Value = "09"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "11", Value = "11"},
+                             new SelectListItem { Text = "12", Value = "12"},
+                             new SelectListItem { Text = "13", Value = "13"},
+                             new SelectListItem { Text = "14", Value = "14"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "16", Value = "16"},
+                             new SelectListItem { Text = "17", Value = "17"},
+                             new SelectListItem { Text = "18", Value = "18"},
+                             new SelectListItem { Text = "19", Value = "19"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "21", Value = "21"},
+                             new SelectListItem { Text = "22", Value = "22"},
+                             new SelectListItem { Text = "23", Value = "23"},
+                        }, "", "00")
+                        @Html.DropDownListFor(M => M.TueOM, new List<SelectListItem>
+                            { new SelectListItem { Text = "00", Value = "00", Selected = true},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "25", Value = "25"},
+                             new SelectListItem { Text = "30", Value = "30"},
+                             new SelectListItem { Text = "35", Value = "35"},
+                             new SelectListItem { Text = "40", Value = "40"},
+                             new SelectListItem { Text = "45", Value = "45"},
+                             new SelectListItem { Text = "50", Value = "50"},
+                             new SelectListItem { Text = "55", Value = "55"},
+                             new SelectListItem { Text = "59", Value = "59"},
+                        }, "", "00")
+                        -
+                        @Html.DropDownListFor(M => M.TueCH, new List<SelectListItem>
+                            { new SelectListItem { Text = "00", Value = "00"},
+                             new SelectListItem { Text = "01", Value = "01"},
+                             new SelectListItem { Text = "02", Value = "02"},
+                             new SelectListItem { Text = "03", Value = "03"},
+                             new SelectListItem { Text = "04", Value = "04"},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "06", Value = "06"},
+                             new SelectListItem { Text = "07", Value = "07"},
+                             new SelectListItem { Text = "08", Value = "08"},
+                             new SelectListItem { Text = "09", Value = "09"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "11", Value = "11"},
+                             new SelectListItem { Text = "12", Value = "12"},
+                             new SelectListItem { Text = "13", Value = "13"},
+                             new SelectListItem { Text = "14", Value = "14"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "16", Value = "16"},
+                             new SelectListItem { Text = "17", Value = "17"},
+                             new SelectListItem { Text = "18", Value = "18"},
+                             new SelectListItem { Text = "19", Value = "19"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "21", Value = "21"},
+                             new SelectListItem { Text = "22", Value = "22"},
+                             new SelectListItem { Text = "23", Value = "23", Selected = true},
+                        }, "", "00")
+                        @Html.DropDownListFor(M => M.TueCM, new List<SelectListItem>
+                            { new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "25", Value = "25"},
+                             new SelectListItem { Text = "30", Value = "30"},
+                             new SelectListItem { Text = "35", Value = "35"},
+                             new SelectListItem { Text = "40", Value = "40"},
+                             new SelectListItem { Text = "45", Value = "45"},
+                             new SelectListItem { Text = "50", Value = "50"},
+                             new SelectListItem { Text = "55", Value = "55" },
+                             new SelectListItem { Text = "59", Value = "59", Selected = true},
+                        }, "", "00")
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-3 col-sm-6 col-lg-2">Wed</label>
+                    <div class="col-9 col-sm-6 col-lg-10 text-start">
+                        @Html.DropDownListFor(M => M.WedOH, new List<SelectListItem>
+                           { new SelectListItem { Text = "00", Value = "00", Selected = true},
+                            new SelectListItem { Text = "01", Value = "01"},
+                            new SelectListItem { Text = "02", Value = "02"},
+                            new SelectListItem { Text = "03", Value = "03"},
+                            new SelectListItem { Text = "04", Value = "04"},
+                            new SelectListItem { Text = "05", Value = "05"},
+                            new SelectListItem { Text = "06", Value = "06"},
+                            new SelectListItem { Text = "07", Value = "07"},
+                            new SelectListItem { Text = "08", Value = "08"},
+                            new SelectListItem { Text = "09", Value = "09"},
+                            new SelectListItem { Text = "10", Value = "10"},
+                            new SelectListItem { Text = "11", Value = "11"},
+                            new SelectListItem { Text = "12", Value = "12"},
+                            new SelectListItem { Text = "13", Value = "13"},
+                            new SelectListItem { Text = "14", Value = "14"},
+                            new SelectListItem { Text = "15", Value = "15"},
+                            new SelectListItem { Text = "16", Value = "16"},
+                            new SelectListItem { Text = "17", Value = "17"},
+                            new SelectListItem { Text = "18", Value = "18"},
+                            new SelectListItem { Text = "19", Value = "19"},
+                            new SelectListItem { Text = "20", Value = "20"},
+                            new SelectListItem { Text = "21", Value = "21"},
+                            new SelectListItem { Text = "22", Value = "22"},
+                            new SelectListItem { Text = "23", Value = "23"},
+                       }, "", "00")
+                        @Html.DropDownListFor(M => M.WedOM, new List<SelectListItem>
+                            { new SelectListItem { Text = "00", Value = "00", Selected = true},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "25", Value = "25"},
+                             new SelectListItem { Text = "30", Value = "30"},
+                             new SelectListItem { Text = "35", Value = "35"},
+                             new SelectListItem { Text = "40", Value = "40"},
+                             new SelectListItem { Text = "45", Value = "45"},
+                             new SelectListItem { Text = "50", Value = "50"},
+                             new SelectListItem { Text = "55", Value = "55"},
+                             new SelectListItem { Text = "59", Value = "59"},
+                        }, "", "00")
+                        -
+                        @Html.DropDownListFor(M => M.WedCH, new List<SelectListItem>
+                            { new SelectListItem { Text = "01", Value = "01"},
+                             new SelectListItem { Text = "02", Value = "02"},
+                             new SelectListItem { Text = "03", Value = "03"},
+                             new SelectListItem { Text = "04", Value = "04"},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "06", Value = "06"},
+                             new SelectListItem { Text = "07", Value = "07"},
+                             new SelectListItem { Text = "08", Value = "08"},
+                             new SelectListItem { Text = "09", Value = "09"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "11", Value = "11"},
+                             new SelectListItem { Text = "12", Value = "12"},
+                             new SelectListItem { Text = "13", Value = "13"},
+                             new SelectListItem { Text = "14", Value = "14"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "16", Value = "16"},
+                             new SelectListItem { Text = "17", Value = "17"},
+                             new SelectListItem { Text = "18", Value = "18"},
+                             new SelectListItem { Text = "19", Value = "19"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "21", Value = "21"},
+                             new SelectListItem { Text = "22", Value = "22"},
+                             new SelectListItem { Text = "23", Value = "23", Selected = true},
+                        }, "", "00")
+                        @Html.DropDownListFor(M => M.WedCM, new List<SelectListItem>
+                            { new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "25", Value = "25"},
+                             new SelectListItem { Text = "30", Value = "30"},
+                             new SelectListItem { Text = "35", Value = "35"},
+                             new SelectListItem { Text = "40", Value = "40"},
+                             new SelectListItem { Text = "45", Value = "45"},
+                             new SelectListItem { Text = "50", Value = "50"},
+                             new SelectListItem { Text = "55", Value = "55" },
+                             new SelectListItem { Text = "59", Value = "59", Selected = true},
+                        }, "", "00")
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-3 col-sm-6 col-lg-2">Thu</label>
+                    <div class="col-9 col-sm-6 col-lg-10 text-start">
+                        @Html.DropDownListFor(M => M.ThuOH, new List<SelectListItem>
+                           { new SelectListItem { Text = "00", Value = "00", Selected = true},
+                            new SelectListItem { Text = "01", Value = "01"},
+                            new SelectListItem { Text = "02", Value = "02"},
+                            new SelectListItem { Text = "03", Value = "03"},
+                            new SelectListItem { Text = "04", Value = "04"},
+                            new SelectListItem { Text = "05", Value = "05"},
+                            new SelectListItem { Text = "06", Value = "06"},
+                            new SelectListItem { Text = "07", Value = "07"},
+                            new SelectListItem { Text = "08", Value = "08"},
+                            new SelectListItem { Text = "09", Value = "09"},
+                            new SelectListItem { Text = "10", Value = "10"},
+                            new SelectListItem { Text = "11", Value = "11"},
+                            new SelectListItem { Text = "12", Value = "12"},
+                            new SelectListItem { Text = "13", Value = "13"},
+                            new SelectListItem { Text = "14", Value = "14"},
+                            new SelectListItem { Text = "15", Value = "15"},
+                            new SelectListItem { Text = "16", Value = "16"},
+                            new SelectListItem { Text = "17", Value = "17"},
+                            new SelectListItem { Text = "18", Value = "18"},
+                            new SelectListItem { Text = "19", Value = "19"},
+                            new SelectListItem { Text = "20", Value = "20"},
+                            new SelectListItem { Text = "21", Value = "21"},
+                            new SelectListItem { Text = "22", Value = "22"},
+                            new SelectListItem { Text = "23", Value = "23"},
+                       }, "", "00")
+                        @Html.DropDownListFor(M => M.ThuOM, new List<SelectListItem>
+                            {
+                             new SelectListItem { Text = "00", Value = "00", Selected = true},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "25", Value = "25"},
+                             new SelectListItem { Text = "30", Value = "30"},
+                             new SelectListItem { Text = "35", Value = "35"},
+                             new SelectListItem { Text = "40", Value = "40"},
+                             new SelectListItem { Text = "45", Value = "45"},
+                             new SelectListItem { Text = "50", Value = "50"},
+                             new SelectListItem { Text = "55", Value = "55"},
+                             new SelectListItem { Text = "59", Value = "59"},
+                        }, "", "00")
+                        -
+                        @Html.DropDownListFor(M => M.ThuCH, new List<SelectListItem>
+                            { new SelectListItem { Text = "01", Value = "01"},
+                             new SelectListItem { Text = "02", Value = "02"},
+                             new SelectListItem { Text = "03", Value = "03"},
+                             new SelectListItem { Text = "04", Value = "04"},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "06", Value = "06"},
+                             new SelectListItem { Text = "07", Value = "07"},
+                             new SelectListItem { Text = "08", Value = "08"},
+                             new SelectListItem { Text = "09", Value = "09"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "11", Value = "11"},
+                             new SelectListItem { Text = "12", Value = "12"},
+                             new SelectListItem { Text = "13", Value = "13"},
+                             new SelectListItem { Text = "14", Value = "14"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "16", Value = "16"},
+                             new SelectListItem { Text = "17", Value = "17"},
+                             new SelectListItem { Text = "18", Value = "18"},
+                             new SelectListItem { Text = "19", Value = "19"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "21", Value = "21"},
+                             new SelectListItem { Text = "22", Value = "22"},
+                             new SelectListItem { Text = "23", Value = "23", Selected = true},
+                        }, "", "00")
+                        @Html.DropDownListFor(M => M.ThuCM, new List<SelectListItem>
+                            { new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "25", Value = "25"},
+                             new SelectListItem { Text = "30", Value = "30"},
+                             new SelectListItem { Text = "35", Value = "35"},
+                             new SelectListItem { Text = "40", Value = "40"},
+                             new SelectListItem { Text = "45", Value = "45"},
+                             new SelectListItem { Text = "50", Value = "50"},
+                             new SelectListItem { Text = "55", Value = "55" },
+                             new SelectListItem { Text = "59", Value = "59",Selected = true},
+                        }, "", "00")
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-3 col-sm-6 col-lg-2">Fri</label>
+                    <div class="col-9 col-sm-6 col-lg-10 text-start">
+                        @Html.DropDownListFor(M => M.FriOH, new List<SelectListItem>
+                           {
+                            new SelectListItem { Text = "00", Value = "00", Selected = true},
+                            new SelectListItem { Text = "01", Value = "01"},
+                            new SelectListItem { Text = "02", Value = "02"},
+                            new SelectListItem { Text = "03", Value = "03"},
+                            new SelectListItem { Text = "04", Value = "04"},
+                            new SelectListItem { Text = "05", Value = "05"},
+                            new SelectListItem { Text = "06", Value = "06"},
+                            new SelectListItem { Text = "07", Value = "07"},
+                            new SelectListItem { Text = "08", Value = "08"},
+                            new SelectListItem { Text = "09", Value = "09"},
+                            new SelectListItem { Text = "10", Value = "10"},
+                            new SelectListItem { Text = "11", Value = "11"},
+                            new SelectListItem { Text = "12", Value = "12"},
+                            new SelectListItem { Text = "13", Value = "13"},
+                            new SelectListItem { Text = "14", Value = "14"},
+                            new SelectListItem { Text = "15", Value = "15"},
+                            new SelectListItem { Text = "16", Value = "16"},
+                            new SelectListItem { Text = "17", Value = "17"},
+                            new SelectListItem { Text = "18", Value = "18"},
+                            new SelectListItem { Text = "19", Value = "19"},
+                            new SelectListItem { Text = "20", Value = "20"},
+                            new SelectListItem { Text = "21", Value = "21"},
+                            new SelectListItem { Text = "22", Value = "22"},
+                            new SelectListItem { Text = "23", Value = "23"},
+                       }, "", "00")
+                        @Html.DropDownListFor(M => M.FriOM, new List<SelectListItem>
+                            { new SelectListItem { Text = "00", Value = "00", Selected = true},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "25", Value = "25"},
+                             new SelectListItem { Text = "30", Value = "30"},
+                             new SelectListItem { Text = "35", Value = "35"},
+                             new SelectListItem { Text = "40", Value = "40"},
+                             new SelectListItem { Text = "45", Value = "45"},
+                             new SelectListItem { Text = "50", Value = "50"},
+                             new SelectListItem { Text = "55", Value = "55"},
+                             new SelectListItem { Text = "59", Value = "59"},
+                        }, "", "00")
+                        -
+                        @Html.DropDownListFor(M => M.FriCH, new List<SelectListItem>
+                            { new SelectListItem { Text = "01", Value = "01"},
+                             new SelectListItem { Text = "02", Value = "02"},
+                             new SelectListItem { Text = "03", Value = "03"},
+                             new SelectListItem { Text = "04", Value = "04"},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "06", Value = "06"},
+                             new SelectListItem { Text = "07", Value = "07"},
+                             new SelectListItem { Text = "08", Value = "08"},
+                             new SelectListItem { Text = "09", Value = "09"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "11", Value = "11"},
+                             new SelectListItem { Text = "12", Value = "12"},
+                             new SelectListItem { Text = "13", Value = "13"},
+                             new SelectListItem { Text = "14", Value = "14"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "16", Value = "16"},
+                             new SelectListItem { Text = "17", Value = "17"},
+                             new SelectListItem { Text = "18", Value = "18"},
+                             new SelectListItem { Text = "19", Value = "19"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "21", Value = "21"},
+                             new SelectListItem { Text = "22", Value = "22"},
+                             new SelectListItem { Text = "23", Value = "23", Selected = true},
+                        }, "", "00")
+                        @Html.DropDownListFor(M => M.FriCM, new List<SelectListItem>
+                            { new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "25", Value = "25"},
+                             new SelectListItem { Text = "30", Value = "30"},
+                             new SelectListItem { Text = "35", Value = "35"},
+                             new SelectListItem { Text = "40", Value = "40"},
+                             new SelectListItem { Text = "45", Value = "45"},
+                             new SelectListItem { Text = "50", Value = "50"},
+                             new SelectListItem { Text = "55", Value = "55" },
+                             new SelectListItem { Text = "59", Value = "59" ,Selected = true},
+                        }, "", "00")
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-3 col-sm-6 col-lg-2">Sat</label>
+                    <div class="col-9 col-sm-6 col-lg-10 text-start">
+                        @Html.DropDownListFor(M => M.SatOH, new List<SelectListItem>
+                           {
+                            new SelectListItem { Text = "00", Value = "00", Selected = true},
+                            new SelectListItem { Text = "01", Value = "01"},
+                            new SelectListItem { Text = "02", Value = "02"},
+                            new SelectListItem { Text = "03", Value = "03"},
+                            new SelectListItem { Text = "04", Value = "04"},
+                            new SelectListItem { Text = "05", Value = "05"},
+                            new SelectListItem { Text = "06", Value = "06"},
+                            new SelectListItem { Text = "07", Value = "07"},
+                            new SelectListItem { Text = "08", Value = "08"},
+                            new SelectListItem { Text = "09", Value = "09"},
+                            new SelectListItem { Text = "10", Value = "10"},
+                            new SelectListItem { Text = "11", Value = "11"},
+                            new SelectListItem { Text = "12", Value = "12"},
+                            new SelectListItem { Text = "13", Value = "13"},
+                            new SelectListItem { Text = "14", Value = "14"},
+                            new SelectListItem { Text = "15", Value = "15"},
+                            new SelectListItem { Text = "16", Value = "16"},
+                            new SelectListItem { Text = "17", Value = "17"},
+                            new SelectListItem { Text = "18", Value = "18"},
+                            new SelectListItem { Text = "19", Value = "19"},
+                            new SelectListItem { Text = "20", Value = "20"},
+                            new SelectListItem { Text = "21", Value = "21"},
+                            new SelectListItem { Text = "22", Value = "22"},
+                            new SelectListItem { Text = "23", Value = "23"},
+                       }, "", "00")
+                        @Html.DropDownListFor(M => M.SatOM, new List<SelectListItem>
+                            {
+                             new SelectListItem { Text = "00", Value = "00", Selected = true},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "25", Value = "25"},
+                             new SelectListItem { Text = "30", Value = "30"},
+                             new SelectListItem { Text = "35", Value = "35"},
+                             new SelectListItem { Text = "40", Value = "40"},
+                             new SelectListItem { Text = "45", Value = "45"},
+                             new SelectListItem { Text = "50", Value = "50"},
+                             new SelectListItem { Text = "55", Value = "55"},
+                             new SelectListItem { Text = "59", Value = "59"},
+                        }, "", "00")
+                        -
+                        @Html.DropDownListFor(M => M.SatCH, new List<SelectListItem>
+                            {
+                             new SelectListItem { Text = "01", Value = "01"},
+                             new SelectListItem { Text = "01", Value = "01"},
+                             new SelectListItem { Text = "02", Value = "02"},
+                             new SelectListItem { Text = "03", Value = "03"},
+                             new SelectListItem { Text = "04", Value = "04"},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "06", Value = "06"},
+                             new SelectListItem { Text = "07", Value = "07"},
+                             new SelectListItem { Text = "08", Value = "08"},
+                             new SelectListItem { Text = "09", Value = "09"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "11", Value = "11"},
+                             new SelectListItem { Text = "12", Value = "12"},
+                             new SelectListItem { Text = "13", Value = "13"},
+                             new SelectListItem { Text = "14", Value = "14"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "16", Value = "16"},
+                             new SelectListItem { Text = "17", Value = "17"},
+                             new SelectListItem { Text = "18", Value = "18"},
+                             new SelectListItem { Text = "19", Value = "19"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "21", Value = "21"},
+                             new SelectListItem { Text = "22", Value = "22"},
+                             new SelectListItem { Text = "23", Value = "23", Selected = true},
+                        }, "", "00")
+                        @Html.DropDownListFor(M => M.SatCM, new List<SelectListItem>
+                            { new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "25", Value = "25"},
+                             new SelectListItem { Text = "30", Value = "30"},
+                             new SelectListItem { Text = "35", Value = "35"},
+                             new SelectListItem { Text = "40", Value = "40"},
+                             new SelectListItem { Text = "45", Value = "45"},
+                             new SelectListItem { Text = "50", Value = "50"},
+                             new SelectListItem { Text = "55", Value = "55" },
+                             new SelectListItem { Text = "59", Value = "59",Selected = true},
+                        }, "", "00")
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-3 col-sm-6 col-lg-2">Sun</label>
+                    <div class="col-9 col-sm-6 col-lg-10 text-start">
+                        @Html.DropDownListFor(M => M.SunOH, new List<SelectListItem>
+                           {
+                            new SelectListItem { Text = "00", Value = "00", Selected = true},
+                            new SelectListItem { Text = "01", Value = "01"},
+                            new SelectListItem { Text = "02", Value = "02"},
+                            new SelectListItem { Text = "03", Value = "03"},
+                            new SelectListItem { Text = "04", Value = "04"},
+                            new SelectListItem { Text = "05", Value = "05"},
+                            new SelectListItem { Text = "06", Value = "06"},
+                            new SelectListItem { Text = "07", Value = "07"},
+                            new SelectListItem { Text = "08", Value = "08"},
+                            new SelectListItem { Text = "09", Value = "09"},
+                            new SelectListItem { Text = "10", Value = "10"},
+                            new SelectListItem { Text = "11", Value = "11"},
+                            new SelectListItem { Text = "12", Value = "12"},
+                            new SelectListItem { Text = "13", Value = "13"},
+                            new SelectListItem { Text = "14", Value = "14"},
+                            new SelectListItem { Text = "15", Value = "15"},
+                            new SelectListItem { Text = "16", Value = "16"},
+                            new SelectListItem { Text = "17", Value = "17"},
+                            new SelectListItem { Text = "18", Value = "18"},
+                            new SelectListItem { Text = "19", Value = "19"},
+                            new SelectListItem { Text = "20", Value = "20"},
+                            new SelectListItem { Text = "21", Value = "21"},
+                            new SelectListItem { Text = "22", Value = "22"},
+                            new SelectListItem { Text = "23", Value = "23"},
+                       }, "", "00")
+                        @Html.DropDownListFor(M => M.SunOM, new List<SelectListItem>
+                            {
+                             new SelectListItem { Text = "00", Value = "00",Selected = true},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "25", Value = "25"},
+                             new SelectListItem { Text = "30", Value = "30"},
+                             new SelectListItem { Text = "35", Value = "35"},
+                             new SelectListItem { Text = "40", Value = "40"},
+                             new SelectListItem { Text = "45", Value = "45"},
+                             new SelectListItem { Text = "50", Value = "50"},
+                             new SelectListItem { Text = "55", Value = "55"},
+                             new SelectListItem { Text = "59", Value = "59"},
+                        }, "", "00")
+                        -
+                        @Html.DropDownListFor(M => M.SunCH, new List<SelectListItem>
+                            { new SelectListItem { Text = "01", Value = "01"},
+                             new SelectListItem { Text = "02", Value = "02"},
+                             new SelectListItem { Text = "03", Value = "03"},
+                             new SelectListItem { Text = "04", Value = "04"},
+                             new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "06", Value = "06"},
+                             new SelectListItem { Text = "07", Value = "07"},
+                             new SelectListItem { Text = "08", Value = "08"},
+                             new SelectListItem { Text = "09", Value = "09"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "11", Value = "11"},
+                             new SelectListItem { Text = "12", Value = "12"},
+                             new SelectListItem { Text = "13", Value = "13"},
+                             new SelectListItem { Text = "14", Value = "14"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "16", Value = "16"},
+                             new SelectListItem { Text = "17", Value = "17"},
+                             new SelectListItem { Text = "18", Value = "18"},
+                             new SelectListItem { Text = "19", Value = "19"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "21", Value = "21"},
+                             new SelectListItem { Text = "22", Value = "22"},
+                             new SelectListItem { Text = "23", Value = "23", Selected = true},
+                        }, "", "00")
+                        @Html.DropDownListFor(M => M.SunCM, new List<SelectListItem>
+                            { new SelectListItem { Text = "05", Value = "05"},
+                             new SelectListItem { Text = "10", Value = "10"},
+                             new SelectListItem { Text = "15", Value = "15"},
+                             new SelectListItem { Text = "20", Value = "20"},
+                             new SelectListItem { Text = "25", Value = "25"},
+                             new SelectListItem { Text = "30", Value = "30"},
+                             new SelectListItem { Text = "35", Value = "35"},
+                             new SelectListItem { Text = "40", Value = "40"},
+                             new SelectListItem { Text = "45", Value = "45"},
+                             new SelectListItem { Text = "50", Value = "50"},
+                             new SelectListItem { Text = "55", Value = "55" },
+                             new SelectListItem { Text = "59", Value = "59",Selected = true},
+                        }, "", "00")
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="form-group row control-label">
+            <div class="col float-left">
+                <input type="submit" value="Save" class="btn btn btn-success btn-block" />
+            </div>
+        </div>
+    }
+    <div class="form-group row control-label">
+        <div class="col-lg-3">
+            <button id="btnICC" class="btn btn-primary btn-block btn-secondary">Transactions</button>
+        </div>
+        <div class="col-lg-3">
+            @*    <button id="btnICC" class="btn btn-primary btn-block btn-secondary">Transactions</button>*@
+        </div>
+        <div class="col-lg-3">
+            <button id="btnPayments" class="btn btn-primary btn-block btn-secondary">Payments</button>
+        </div>
+        <div class="col-lg-3">
+            <button id="btnTerm" class="btn btn-primary btn-block btn-secondary">Terminals</button>
+        </div>
+    </div>
+</div>
+
+<div class="container" id="AREA_PARTIAL_VIEW"></div>
+
+<div class="container" hidden id="newtermbutton">
+    <button id="btnTermnew" class="btn btn-primary btn-block btn-secondary" onclick="location.href='@Url.Action("AddTerminal", "Merchant",  new {mid= Model.MerchantID})'">Add Terminal</button>
+</div>
+
+<link href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            document.getElementById("balancetxt").readOnly = true;
+
+            if ($("#statustext").val() == "Disabled") {
+            //    $("#statustext").style.backgroundColor = red;
+                $("#statustext").css("background", "red");
+                $("#statustext").css("color", "white");
+            }
+
+            $("#btnICC").click(function () {
+                $("#newtermbutton").attr("hidden", "newtermbutton");
+                $("#AREA_PARTIAL_VIEW").load('@Url.Action("ShowICCTransactions", "Merchant")' + "?mid=" + $("#merchantID").val());
+            });
+            $("#btnTerm").click(function () {
+                $("#newtermbutton").removeAttr("hidden");
+                $("#AREA_PARTIAL_VIEW").load('@Url.Action("MerchantTerminals", "Merchant")' + "?mid=" + $("#merchantID").val());
+            });
+            $("#btnPayments").click(function () {
+                $("#AREA_PARTIAL_VIEW").load('@Url.Action("MerchantPayments", "Merchant")' + "?mid=" + $("#merchantID").val());
+            });
+        });
+
+        function balanceUpdated() {
+            location.reload(true);
+        }
+    </script>
+}
+
+
+@if (ViewBag.Message != null)
+{
+
+    <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+
+
+}

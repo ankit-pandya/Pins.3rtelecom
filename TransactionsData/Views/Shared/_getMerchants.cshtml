@@ -1,0 +1,109 @@
+﻿<div class="container">
+    <table id="tbl" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Merchant ID</th>
+                <th>Old Merchant ID</th>
+                <th>Name</th>
+                <th>Address1</th>
+                <th>Postcode</th>
+                <th>TerminalID</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<link href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@section scripts{
+<script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+<script>
+    var input = document.getElementById("MerchantID");
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("btnSearch").click();
+        }
+    });
+    var input = document.getElementById("OldMID");
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("btnSearch").click();
+        }
+    });
+    var input = document.getElementById("Name");
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("btnSearch").click();
+        }
+    });
+    var input = document.getElementById("ContactName");
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("btnSearch").click();
+        }
+    });
+    var input = document.getElementById("Address1");
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("btnSearch").click();
+        }
+    });
+    var input = document.getElementById("TerminalId");
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("btnSearch").click();
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#btnSearch").click(function () {
+            var FormData = {
+                "MerchantID": $("#MerchantID").val(),
+                "OldMID": $("#OldMID").val(),
+                "Name": $("#Name").val(),
+                "ContactName": $("#ContactName").val(),
+                "Address1": $("#Address1").val(),
+                "TerminalId": $("#TerminalId").val()
+            };
+
+            if ($.fn.dataTable.isDataTable('#tbl')) {
+                table = $('#tbl').DataTable();
+                table.destroy();
+            }
+
+            $("#tbl").DataTable({
+                "ajax": {
+                    "url": @Url.Action("Search", "Home"),
+                    "type": "Post",
+                    "data": FormData,
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        "data": "merchantID", render: function (data) {
+                            data = "<a href=" + @Url.Action("ShowMerchant", "Merchant") + "?mid=" + data + ">" + data + '</a>';
+                            return data;
+                        }
+                    },
+                    { "data": "oldMID" },
+                    { "data": "name" },
+                    { "data": "address1" },
+                    { "data": "postcode" },
+                    { "data": "terminalId" },
+                    { "data": "status" },
+                ]
+            });
+        });
+    });
+</script>
+
+}

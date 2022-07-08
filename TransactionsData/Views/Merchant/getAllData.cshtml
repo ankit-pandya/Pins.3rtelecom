@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewData["Title"] = "getAll";
+}
+
+<h1>Merchant List</h1>
+
+@model TransactionsData.Models.MerchantModel
+@{
+    ViewData["Title"] = "Merchant Search";
+}
+
+<div class="container jumbotron">
+    @using (Html.BeginForm("getAllData", "Merchant", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-md-12">
+            <div class="form-group row control-label">
+                <div class="col">
+                    Merchant Id:
+                    @Html.EditorFor(model => model.MerchantID, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col">
+                    3R Merchant Id:
+                    @Html.EditorFor(model => model.OldMID, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+
+            <div class="form-group row control-label">
+                <div class="col">
+                    Merchant Name:
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col">
+                    Contact Name:
+                    @Html.EditorFor(model => model.ContactName, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+
+            <div class="form-group row control-label">
+                <div class="col">
+                    Address:
+                    @Html.EditorFor(model => model.Address1, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col">
+                    Postcode:
+                    @Html.EditorFor(model => model.Postcode, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+
+            <div class="form-group row control-label">
+                <div class="col ">
+                    Terminal Id:
+                    @Html.EditorFor(model => model.TerminalId, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col ">
+                    Telephone:
+                    @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+
+            <div class="form-group row control-label">
+                <div class="col float-left">
+                    <input type="submit" value="     Search     " class="btn btn-primary" />
+                </div>
+                <div class="col float-right">
+                    <input class="btn btn-primary" type="button" value="Create New Merchant" onclick="location.href='@Url.Action("CreateMerchant", "Merchant")'" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<table id="tbl" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Merchant ID</th>
+            <th>Old Merchant ID</th>
+            <th>Name</th>
+            <th>Address1</th>
+            <th>Postcode</th>
+            <th>TerminalID</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+</table>
+<link href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#tbl").DataTable({
+                "ajax": {
+                    "url": "~/Merchant/getAll",
+                    "type": "GET",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        "data": "merchantID", render: function (data) {
+                            data = '<a href="~/Merchant/ShowMerchant?mid=' + data + '">' + data + '</a>';
+                            return data;
+                        }
+                    },
+                    { "data": "oldMID" },
+                    { "data": "name" },
+                    { "data": "address1" },
+                    { "data": "postcode" },
+                    { "data": "terminalId" },
+                    { "data": "status" },
+                ]
+            });
+
+        });
+    </script>
+
+}

@@ -1,0 +1,83 @@
+﻿<div>
+    <h1 class="text-lg-center">Payments</h1>
+    <div class="row">
+        <div class="container jumbotron col-md-6">
+            <div>
+                @*@using (Html.BeginForm(new { @class = "form -horizontal", role = "form" }))*@
+                @*  {*@
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <div class="col">
+                            Payment Amount:
+                            <input id="amt" class=" form-control" type="text" />
+                        </div>
+                        <div class="col float-left">
+                            <input id="btnUpload" class="btn btn-primary btn-block" type="button" value="Make Payment" />
+                        </div>
+                    </div>
+                @* } *@
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <table id="tblPayments" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Date Time</th>
+                <th>Amount</th>
+                <th>Balance</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<link href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        if ($.fn.dataTable.isDataTable('#tblPayments')) {
+            table = $('#tblPayments').DataTable();
+                table.destroy();
+        }
+
+        $("#btnUpload").click(function () {
+                $.ajax(
+                    {
+                        url: "@Url.Action("uploadPayment", "Merchant")" + "?mid=" + "@ViewData["MerchantID"]" + "&amt=" + $("#amt").val(),
+                        type: "POST",
+                        success: function (response) {
+                            alert("Banace Updated!")
+                            $("#balancetxt").trigger("change")
+                        },
+                        error: function (response) {
+                            alert("error") // I'm always get this.
+                        }
+                    }
+                   
+            );            
+            
+            });
+
+        $("#tblPayments").DataTable({
+                "ajax": {
+                    "url": '@Url.Action("getListofPayments", "Merchant")' + "?mid=" + "@ViewData["MerchantID"]",
+                    "type": "Get",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {"data": "username"},
+                    {
+                        "data": "paydatetime", render: function (data) {
+                            var d = new Date(data);
+                            return d.toLocaleString()
+                        }
+                    },
+                    { "data": "amount" },
+                    { "data": "balance" },
+                ]
+            });
+
+    });
+</script>

@@ -1,0 +1,143 @@
+﻿@model TransactionsData.Models.ProductPinsModel
+@{
+    ViewData["Title"] = "Pin";
+}
+<h1>Pins Details</h1>
+<div class="row">
+    <div class="container jumbotron col-md-8">
+        @using (Html.BeginForm(new { @class = "form-horizontal", role = "form", @id = "frmData" }))        
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group row control-label">
+                <div class="col">
+                    Product Name:
+                    <input type="text" id="productname" class="form-control"/>                    
+                </div>
+                <div class="col">
+                    Product Code:
+                    <input type="text" id="productcode" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row control-label">
+                <div class="col float-left ">                    
+                    <input id="btnSearch" class="btn btn-primary" type="button" value="Search" />
+                </div>                
+            </div>
+        }
+    </div>
+
+    <div class="container jumbotron col-md-4">
+        @using (Html.BeginForm(new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group row control-label">
+                Select File to upload Pins:
+                <input class="form-control" type="File" id="filetoupload">
+            </div>
+            <div class="form-group">
+                <div class="col float-left ">
+                    <input id="btnUpload" class="btn btn-primary btn-block" type="button" value="Upload" />
+                </div>                
+            </div>            
+        }
+    </div>
+</div>
+
+
+<div id="tableshow"  hidden class="container col-md-12">
+    <table id="tbl" class="table table-bordered table-striped">
+        <thead>
+            <tr>               
+                <th>Product Code</th>
+                <th>Provider Code</th>
+                <th>Product Name</th>
+                <th>Value</th>                                
+                <th>Available Pins</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<link href="//cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+@section scripts{
+    <script src="//cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        var input = document.getElementById("productname");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("btnSearch").click();
+            }
+        });
+        var input = document.getElementById("productcode");
+        input.addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("btnSearch").click();
+            }
+        });        
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            $("#btnSearch").click(function () {
+                document.getElementById("tableshow").removeAttribute("hidden");
+
+                if ($.fn.dataTable.isDataTable('#tbl')) {
+                    table = $('#tbl').DataTable();
+                    table.destroy();
+                }
+
+                $("#tbl").DataTable({
+                    "ajax": {
+                        "url": "@Url.Action("Searchpin", "Product")" + "?prodcode=" + $("#productcode").val() + "&prodname=" + $("#productname").val(),
+                        "type": "Post",
+                        "datatype": "json"
+                    },
+                    "columns": [
+                        {
+                            "data": "productCode"
+                            @*, render: function (data) {
+                                var url = '@Url.Action("ShowPin", "ICC")';
+                                data = "<a href=" + url + "?prodid=" + data + ">" + data + '</a>';
+                                return data;
+                            }*@
+                        },
+                        { "data": "providerCode" },
+                        { "data": "followOnCall" },
+                        {
+                            "data": "denomination", render: function (data) {
+                                var d = "£" + (Number(data) / 100).toFixed(2);
+                                return d
+                            }
+                        },
+                        { "data": "numberRemaining" },                        
+                    ]
+                });
+            });
+
+            $("#btnUpload").click(function () {                
+                var formData = new FormData();
+                formData.append('postedFile', $('#filetoupload')[0].files[0]);
+                $("#filetoupload").val('');
+                $.ajax(
+                    {
+                        url: "@Url.Action("PinUpload", "Product")",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        type: "POST",
+                        success: function (data) {
+                            alert("Files Uploaded!");
+                        }
+                    }
+                );
+            });
+        });
+    </script>
+
+}
+
