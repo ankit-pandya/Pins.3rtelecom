@@ -12,7 +12,7 @@
                 <div class="form-group row control-label">
                     <div class="col-md-4">
                         Merchant Id:
-                        @Html.EditorFor(model => model.MerchantID, new { htmlAttributes = new { @class = "form-control", name = "mid", @id = "MerchantID" } })
+                        @Html.EditorFor(model => model.MerchantID, new { htmlAttributes = new { @class = "form-control", name = "mid", @id = "MerchantID" } })                        
                     </div>
                     <div class="col-md-4">
                         3R Merchant Id:
@@ -54,7 +54,7 @@
     </div>
 </div>
 
-<div id="tableshow" class="container" hidden>
+<div id="tableshow" hidden>
     <table id="tbl" class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -141,7 +141,7 @@
                 }
 
                 $("#tbl").DataTable({
-                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                    "lengthMenu": [[20, 35, 50, -1], [20, 35, 50, "All"]],
                     "ajax": {
                         "url": '@Url.Action("Search", "Home")',
                         "type": "Post",

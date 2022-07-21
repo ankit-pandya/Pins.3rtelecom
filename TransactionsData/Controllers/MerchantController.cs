@@ -244,8 +244,12 @@ namespace TransactionsData.Controllers
         {            
             var idtoUpdate = merchant.Id;
             var DataBalacne = _context.tblMerchantBalance.FirstOrDefault(m => m.MerchantID == merchant.MerchantID);
-            merchant.Balance = DataBalacne.Balance;
             
+            if(DataBalacne != null)
+            {
+                merchant.Balance = DataBalacne.Balance;
+            }
+                            
             _context.Merchants.Update(merchant);
             _context.SaveChanges();           
 
@@ -386,6 +390,19 @@ namespace TransactionsData.Controllers
             MerchantTerminals mt  = (from t in _context.MerchantTerminal where t.TerminalId == tid && t.MerchantID == int.Parse(mid) select t).FirstOrDefault();
             
             return View("ShowMerchantTerminal", mt);
+        }
+
+        public ActionResult DeleteTerminal(string tid, string mid)
+        {
+            ViewData["TIDDELETED"] = "";
+            MerchantTerminals mtd = (from t in _context.MerchantTerminal where t.TerminalId == tid && t.MerchantID == int.Parse(mid) select t).FirstOrDefault();
+            if(mtd != null)
+            {
+                _context.MerchantTerminal.Remove(mtd);
+                _context.SaveChangesAsync();
+            }
+                       
+            return LocalRedirect($"~/Merchant/ShowMerchant?mid={mid}&update=true&create=false");
         }
 
         public ActionResult getMTUTransactions(string mid)

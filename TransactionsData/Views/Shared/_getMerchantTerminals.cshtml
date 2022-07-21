@@ -1,9 +1,10 @@
 ﻿
-<table id="tblTerms" class="table table-bordered table-striped">
+<table id="tblTerms" class="table table-bordered table-striped col-md-4">
     <thead>
         <tr>
             <th>Terminal ID</th>
-            <th>IP Address</th>            
+            @*<th>IP Address</th>*@
+            <th>Remove</th>
         </tr>
     </thead>
 </table>
@@ -29,7 +30,13 @@
                             return data;
                         }
                     },
-                    { "data": "ipAddress" },
+                    /*{ "data": "ipAddress" },*/
+                    {
+                        "data": "terminalId", render: function (data) {
+                            var datareturn = "<a href=" + '@Url.Action("DeleteTerminal", "Merchant")' + "?tid=" + data + "&mid=" + "@ViewData["MerchantID"]" + "> Remove </a>";                            
+                            return datareturn;
+                        }
+                    },
                 ]
             });
 

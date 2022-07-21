@@ -7,118 +7,141 @@
 
 
 <div class="container jumbotron">
-    @using (Html.BeginForm("CreateMerchant", "Merchant", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("CreateMerchant", "Merchant", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, true, new { @class = "form-horizontal", @role = "form"  }))
     {
         @Html.AntiForgeryToken()
-    <div class="col-md-12">
-        <div class="form-group row control-label">
-            <div class="col">
-                Merchant Id:
-                @Html.EditorFor(model => model.MerchantID, new { htmlAttributes = new { @class = "form-control" } })
+        <div class="col-md-12">
+            <div class="form-group row control-label">
+                <div class="col">
+                    Merchant Id:
+                    @Html.EditorFor(model => model.MerchantID, new { htmlAttributes = new { @class = "form-control" , id="mid"} })                    
+                </div>
+                <div class="col">
+                    3R Merchant Id:
+                    @Html.EditorFor(model => model.OldMID, new { htmlAttributes = new { @class = "form-control", id = "oldmid" } })                    
+                </div>
             </div>
-            <div class="col">
-                3R Merchant Id:
-                @Html.EditorFor(model => model.OldMID, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-        </div>
 
-        <div class="form-group row control-label">
-            <div class="col">
-                Merchant Name:
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="form-group row control-label">
+                <div class="col">
+                    Merchant Name:
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col">
+                    Contact Name:
+                    @Html.EditorFor(model => model.ContactName, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
             </div>
-            <div class="col">
-                Contact Name:
-                @Html.EditorFor(model => model.ContactName, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-        </div>
 
-        <div class="form-group row control-label">
-            <div class="col">
-                Address:
-                @Html.EditorFor(model => model.Address1, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="form-group row control-label">
+                <div class="col">
+                    Address:
+                    @Html.EditorFor(model => model.Address1, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col">
+                    Town:
+                    @Html.EditorFor(model => model.Address3, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
             </div>
-            <div class="col">
-                Town:
-                @Html.EditorFor(model => model.Address3, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-        </div>
 
-        <div class="form-group row control-label">
-            <div class="col">
-                County:
-                @Html.EditorFor(model => model.Address4, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="form-group row control-label">
+                <div class="col">
+                    County:
+                    @Html.EditorFor(model => model.Address4, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col">
+                    Postcode:
+                    @Html.EditorFor(model => model.Postcode, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
             </div>
-            <div class="col">
-                Postcode:
-                @Html.EditorFor(model => model.Postcode, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-        </div>
 
-        <div class="form-group row control-label">
-            <div class="col">
-                Status:
-                @{
-                    var statues = new List<SelectListItem>()
-                                        {
+            <div class="form-group row control-label">
+                <div class="col">
+                    Status:
+                    @{
+                        var statues = new List<SelectListItem>()
+                                                {
                             new SelectListItem() { Text = "Enabled", Value = "Enabled" },
                             new SelectListItem() { Text = "Disabled", Value = "Disabled" },
                         };
-                }
+                    }
 
-                @Html.DropDownListFor(model => model.Status, statues, new { @class = "form-control" })
-            </div>
-            <div class="col">
-                Type:
-                @{
-                    var types = new List<SelectListItem>()
-                                            {
+                    @Html.DropDownListFor(model => model.Status, statues, new { @class = "form-control" })
+                </div>
+                <div class="col">
+                    Type:
+                    @{
+                        var types = new List<SelectListItem>()
+                                                    {
                             new SelectListItem() { Text = "Credit", Value = "Credit" },
                             new SelectListItem() { Text = "Prepay", Value = "Prepay" },
                         };
-                }
+                    }
 
-                @Html.DropDownListFor(model => model.Type, types, new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.Type, types, new { @class = "form-control" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row control-label">
-            <div class="col">
-                Balance:
-                @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { @class = "form-control", @id = "balancetxt" } })
+            <div class="form-group row control-label">
+                <div class="col">
+                    Balance:
+                    @Html.EditorFor(model => model.Balance, new { htmlAttributes = new { @class = "form-control", @id = "balancetxt" } })
+                </div>
+                <div class="col">
+                    Balance Warning:
+                    @Html.EditorFor(model => model.BalWarning, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
             </div>
-            <div class="col">
-                Balance Warning:
-                @Html.EditorFor(model => model.BalWarning, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="form-group row control-label">
+                <div class="col">
+                    Credit Limit:
+                    @Html.EditorFor(model => model.CreditLimit, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col">
+                    Pin mode:
+                    @{
+                        var typesofmode = new List<SelectListItem>()
+                                                                                                                                                                                                                                                                                                                                                                                                                                {
+                            new SelectListItem() { Text = "Online First", Value = "Online First" },
+                            new SelectListItem() { Text = "Stock First", Value = "Stock First" },
+                        };
+                    }
+                    @Html.DropDownListFor(model => model.PinMode, typesofmode, new { @class = "form-control", @id = "pinmode" })
+                </div>
             </div>
-        </div>
-        <div class="form-group row control-label">
-            <div class="col">
-                Credit Limit:
-                @Html.EditorFor(model => model.CreditLimit, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-            <div class="col">
-                Pin mode:
-                @Html.EditorFor(model => model.PinMode, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-        </div>
 
-        <div class="form-group row control-label">
-            <div class="col ">
-                Terminal Id:
-                @Html.EditorFor(model => model.TerminalId, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="form-group row control-label">
+                <div class="col ">
+                    Telephone:
+                    @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col ">
+                </div>
             </div>
-            <div class="col ">
-                Telephone:
-                @Html.EditorFor(model => model.Telephone, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-        </div>
-
-        <div class="form-group row control-label">
-            <div class="col float-left">
-                <input type="submit" value="           Save           " class="btn btn-success" />
+            <div class="form-group row control-label">
+                <div class="col float-left">
+                    <input type="submit" value="           Save           " class="btn btn-success" onclick="return validateTagInput()"/>
+                </div>
             </div>
         </div>
-    </div>
     }
 </div>
+
+<script>
+     function validateTagInput()
+     {   
+         var mid = $("#mid").val();         
+         if (mid.length != 6)
+         {
+             alert("Merchant Id should be 6 digits long.");
+                return false;
+         }
+
+         var oldmid = $("#oldmid").val();
+         
+         if (oldmid.length != 8) {
+             alert("3R Merchant Id should be 8 digits long.");
+             return false;
+         }
+     }
+</script>

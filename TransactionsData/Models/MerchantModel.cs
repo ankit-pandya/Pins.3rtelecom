@@ -10,10 +10,11 @@ namespace TransactionsData.Models
     {
         [Key]
         public int Id { get; set; }
-        [Display(Name = "Merchant ID")]
+        [Display(Name = "Merchant ID")]        
         public int MerchantID { get; set; }
 
         [Display(Name = "Old Merchant ID")]
+        //[StringLength(8, ErrorMessage = "The 3R Merchant ID should be 8 digits long.")]        
         public int OldMID { get; set; }
 
         [Display(Name = "Name")]

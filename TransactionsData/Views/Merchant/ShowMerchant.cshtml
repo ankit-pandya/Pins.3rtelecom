@@ -15,12 +15,12 @@
                 <div class="form-group row control-label">
                     <div class="col-md-3">
                         Merchant Id:
-                        @Html.EditorFor(model => model.MerchantID, new { htmlAttributes = new { @class = "form-control", @id = "merchantID" } })
-                        <div hidden>@Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @id = "mID" } })</div>
+                        @Html.EditorFor(model => model.MerchantID, new { htmlAttributes = new { @class = "form-control", @id = "merchantID", @maxlength = "6" } })
+                        <div hidden>@Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @id = "mid" } })</div>
                     </div>
                     <div class="col-md-3">
                         3R Merchant Id:
-                        @Html.EditorFor(model => model.OldMID, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.OldMID, new { htmlAttributes = new { @class = "form-control", @id = "oldmid" } })
                     </div>
                     <div class="col-md-3">
                         Merchant Name:
@@ -56,7 +56,7 @@
                         Status:
                         @{
                             var statues = new List<SelectListItem>()
-                                                                                                                                                                                                                                                                                                                                                                {
+                                                                                                                                                                                                                                                                                                                                                                                        {
                             new SelectListItem() { Text = "Enabled", Value = "Enabled" },
                             new SelectListItem() { Text = "Disabled", Value = "Disabled" },
                         };
@@ -67,7 +67,7 @@
                         Type:
                         @{
                             var types = new List<SelectListItem>()
-                                                                                                                                                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                                                                                                                                                                    {
                             new SelectListItem() { Text = "Credit", Value = "Credit" },
                             new SelectListItem() { Text = "Prepay", Value = "Prepay" },
                         };
@@ -95,7 +95,7 @@
                         Pin mode:
                         @{
                             var typesofmode = new List<SelectListItem>()
-                                                                                                                                                                                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                                                                                                                                                                                                    {
                             new SelectListItem() { Text = "Online First", Value = "Online First" },
                             new SelectListItem() { Text = "Stock First", Value = "Stock First" },
                         };
@@ -746,7 +746,7 @@
         </div>
         <div class="form-group row control-label">
             <div class="col float-left">
-                <input type="submit" value="Save" class="btn btn btn-success btn-block" />
+                <input type="submit" value="Save" class="btn btn btn-success btn-block" onclick="return validateTagInput()"/>
             </div>
         </div>
     }
@@ -766,7 +766,7 @@
     </div>
 </div>
 
-<div class="container" id="AREA_PARTIAL_VIEW"></div>
+<div id="AREA_PARTIAL_VIEW"></div>
 
 <div class="container" hidden id="newtermbutton">
     <button id="btnTermnew" class="btn btn-primary btn-block btn-secondary" onclick="location.href='@Url.Action("AddTerminal", "Merchant",  new {mid= Model.MerchantID})'">Add Terminal</button>
@@ -804,17 +804,32 @@
             location.reload(true);
         }
     </script>
+    <script>
+        function validateTagInput() {
+            var mid = $("#mid").val();
+            if (mid.length != 6) {
+                alert("Merchant Id should be 6 digits long.");
+                return false;
+            }
+
+            var oldmid = $("#oldmid").val();
+
+            if (oldmid.length != 8) {
+                alert("3R Merchant Id should be 8 digits long.");
+                return false;
+            }
+        }
+    </script>
 }
 
 
 @if (ViewBag.Message != null)
 {
-
     <script type="text/javascript">
             window.onload = function () {
                 alert("@ViewBag.Message");
             };
     </script>
-
-
 }
+
+    
